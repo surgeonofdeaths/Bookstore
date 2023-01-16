@@ -11,3 +11,12 @@ img.bookcover {
     height: 300px;
     width: auto;
 }
+
+.github-icon {
+    height: 30px;
+    transition: .15s;
+}
+
+.github-icon:hover {
+    transform: scale(110%, 110%);
+}
