@@ -1,6 +1,7 @@
 from django.test import TestCase
-from books.models import Book
+from books.models import Book, Review
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 
 class BookTests(TestCase):
@@ -12,6 +13,17 @@ class BookTests(TestCase):
             title="Harry Potter",
             author="JK Rowling",
             price="25.00",
+        )
+        cls.user = get_user_model().objects.create_user(
+            username="reviewuser",
+            email="reviewuser@email.com",
+            password="testpass123",
+
+        )
+        cls.review = Review.objects.create(
+            book=cls.book,
+            review="An excellent review",
+            author=cls.user,
         )
 
     def test_book_listing(self):
@@ -27,8 +39,9 @@ class BookTests(TestCase):
 
     def test_book_detail_view(self):
         response = self.client.get(self.book.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
         no_response = self.client.get('/books/1/')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(no_response.status_code, 404)
         self.assertContains(response, "Harry Potter")
+        self.assertContains(response, 'An excellent review')
         self.assertTemplateUsed(response, 'books/book_detail.html')
