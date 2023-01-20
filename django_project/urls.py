@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from django.contrib.auth.urls
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Django admin
@@ -25,5 +26,7 @@ urlpatterns = [
     # Local apps
     path('', include('pages.urls')),
     path('books/', include('books.urls')),
-    # path('accounts/', include('accounts.urls')), no need further 'cause we use allauth
 ]
+
+if settings.DEBUG:  # add this to have access to media
+    urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
