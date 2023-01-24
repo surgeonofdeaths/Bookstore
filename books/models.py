@@ -9,7 +9,6 @@ class Book(models.Model):
         primary_key=True,
         default=uuid.uuid4,
         editable=False,
-        # unique=True,
     )
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
@@ -19,6 +18,9 @@ class Book(models.Model):
     class Meta:
         permissions = [
             ('special_status', 'Can read all books'),
+        ]
+        indexes = [
+            models.Index(fields=['id'], name='id_index'),
         ]
 
     def __str__(self):
@@ -36,5 +38,3 @@ class Review(models.Model):
     def __str__(self):
         return self.review[:50]
 
-    def get_absolute_url(self):
-        pass
